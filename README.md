@@ -62,3 +62,4 @@ NEXT_PUBLIC_API_URL=your_api_url_here
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new).
 
 Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+"# NearFoodwebsit.Productionlevel" 

@@ -1,0 +1,20 @@
+{
+    "css.validate": false,
+    "less.validate": false,
+    "scss.validate": false,
+    "stylelint.validate": [
+        "css",
+        "scss"
+    ],
+    "stylelint.customSyntax": "postcss",
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "tailwindCSS.experimental.classRegex": [
+        [
+            "className",
+            "([^'\"`]*?)"
+        ]
+    ],
+    "css.lint.unknownAtRules": "ignore"
+}
