@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { AuthProvider } from '@/components/AuthProvider';
 import { Navbar } from '@/components/Navbar';
+import { FloatingCartButton } from '@/components/FloatingCartButton';
 import { ToastProvider } from '@/components/ui/Toast';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 
@@ -67,6 +68,7 @@ export default function RootLayout({
             <AuthProvider>
               <Navbar />
               <main className="min-h-screen bg-gray-50 pb-20">{children}</main>
+              <FloatingCartButton />
             </AuthProvider>
           </ToastProvider>
         </ErrorBoundary>
