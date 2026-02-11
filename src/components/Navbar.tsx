@@ -3,13 +3,60 @@
 import Link from 'next/link';
 import { ShoppingBag, User, LogOut, Menu, X } from 'lucide-react';
 import { useAuth } from './AuthProvider';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { NavbarSkeleton } from './ui/LoadingSkeleton';
 import { UserProfile } from './UserProfile';
+import { insforge } from '@/lib/insforge';
 
 export function Navbar() {
     const { user, signOut, loading } = useAuth();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [cartCount, setCartCount] = useState(0);
+
+    // Fetch cart count
+    const fetchCartCount = useCallback(async () => {
+        if (!user) {
+            setCartCount(0);
+            return;
+        }
+
+        try {
+            const { data, error } = await insforge.database
+                .from('carts')
+                .select('cart_items(quantity)')
+                .eq('user_id', user.id)
+                .single();
+
+            if (error && error.code !== 'PGRST116') {
+                console.error('Error fetching cart count:', error);
+                return;
+            }
+
+            if (data?.cart_items) {
+                const count = (data.cart_items as any[]).reduce((sum, item) => sum + item.quantity, 0);
+                setCartCount(count);
+            } else {
+                setCartCount(0);
+            }
+        } catch (error) {
+            console.error('Error fetching cart count:', error);
+        }
+    }, [user]);
+
+    useEffect(() => {
+        fetchCartCount();
+    }, [fetchCartCount]);
+
+    // Poll for cart updates every 30 seconds
+    useEffect(() => {
+        if (!user) return;
+
+        const interval = setInterval(() => {
+            fetchCartCount();
+        }, 30000);
+
+        return () => clearInterval(interval);
+    }, [user, fetchCartCount]);
 
     if (loading) {
         return <NavbarSkeleton />;
@@ -31,9 +78,13 @@ export function Navbar() {
                         Explore
                     </Link>
 
-                    <Link href="/cart" className="relative p-2 hover:text-orange-600 transition-colors" aria-label="Cart">
+                    <Link href="/cart" className="relative p-2 hover:text-orange-600 transition-colors group" aria-label="Cart">
                         <ShoppingBag className="h-5 w-5" />
-                        {/* TODO: Add cart count badge when cart hook is ready */}
+                        {cartCount > 0 && (
+                            <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
+                                {cartCount > 9 ? '9+' : cartCount}
+                            </span>
+                        )}
                     </Link>
 
                     {user ? (
@@ -72,10 +123,15 @@ export function Navbar() {
                         </Link>
                         <Link
                             href="/cart"
-                            className="block py-2 text-sm font-medium hover:text-orange-600 transition-colors"
+                            className="flex items-center justify-between py-2 text-sm font-medium hover:text-orange-600 transition-colors"
                             onClick={() => setMobileMenuOpen(false)}
                         >
-                            Cart
+                            <span>Cart</span>
+                            {cartCount > 0 && (
+                                <span className="bg-orange-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                    {cartCount > 9 ? '9+' : cartCount}
+                                </span>
+                            )}
                         </Link>
                         {user ? (
                             <>
