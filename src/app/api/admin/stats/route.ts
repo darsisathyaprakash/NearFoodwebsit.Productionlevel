@@ -21,8 +21,8 @@ export async function GET() {
         ]);
 
         const orders = ordersRes.data || [];
-        const totalMenuItems = menuItemsRes.count || 0;
-        const totalUsers = usersRes.count || 0;
+        const totalMenuItems = menuItemsRes.count ?? 0;
+        const totalUsers = usersRes.count ?? 0;
 
         // Calculate total revenue (sum of all completed/delivered orders)
         const totalRevenue = orders.reduce((sum, order) => {

@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
 
         // Calculate total from cart items
         const calculatedTotal = cartItems.reduce((sum, item) => {
-            const price = item.menu_items?.price || 0;
+            const price = item.menu_items?.price ?? 0;
             return sum + (price * item.quantity);
         }, 0);
 
@@ -138,7 +138,7 @@ export async function POST(request: NextRequest) {
             order_id: order.id,
             menu_item_id: item.menu_item_id,
             name: item.menu_items?.name || 'Unknown Item',
-            price: item.menu_items?.price || 0,
+            price: item.menu_items?.price ?? 0,
             quantity: item.quantity,
         }));
 

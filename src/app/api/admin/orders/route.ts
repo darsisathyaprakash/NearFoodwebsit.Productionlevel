@@ -45,10 +45,10 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
             success: true,
             data: data || [],
-            total: count || 0,
+            total: count ?? 0,
             page,
             limit,
-            totalPages: Math.ceil((count || 0) / limit),
+            totalPages: Math.ceil((count ?? 0) / limit),
         });
     } catch (error) {
         console.error('Admin orders GET error:', error);

@@ -36,7 +36,7 @@ function SettingsContent() {
                 logo_url: json?.data?.logo_url || '',
                 contact_email: json?.data?.contact_email || '',
                 phone: json?.data?.phone || '',
-                delivery_charge: json?.data?.delivery_charge || 2.99,
+                delivery_charge: json?.data?.delivery_charge ?? 2.99,
             });
         } catch (error) {
             console.error('Failed to fetch settings:', error);

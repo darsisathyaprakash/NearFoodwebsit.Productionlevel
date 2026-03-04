@@ -46,7 +46,7 @@ export function FloatingCartButton() {
                 const count = items.reduce((sum, item) => sum + item.quantity, 0);
                 const total = items.reduce((sum, item) => {
                     const menuItem = Array.isArray(item.menu_items) ? item.menu_items[0] : item.menu_items;
-                    return sum + (menuItem?.price || 0) * item.quantity;
+                    return sum + (menuItem?.price ?? 0) * item.quantity;
                 }, 0);
 
                 // Animate if count changed

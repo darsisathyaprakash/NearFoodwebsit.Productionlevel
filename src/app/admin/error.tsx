@@ -20,9 +20,19 @@ export default function AdminError({
                     <span className="text-2xl">⚠️</span>
                 </div>
                 <h1 className="text-xl font-bold text-gray-900 mb-2">Something went wrong</h1>
-                <p className="text-gray-500 mb-6 text-sm">
-                    {error.message || 'An unexpected error occurred while loading the admin page.'}
-                </p>
+                <div className="text-gray-500 mb-6 text-sm flex flex-col gap-2">
+                    <p>An unexpected error occurred while loading the admin page.</p>
+                    {process.env.NODE_ENV === 'development' && error.message && (
+                        <p className="font-mono text-xs bg-red-50 text-red-700 p-2 rounded text-left overflow-auto">
+                            {error.message}
+                        </p>
+                    )}
+                    {error.digest && (
+                        <p className="text-xs text-gray-400">
+                            [Reference: {error.digest}]
+                        </p>
+                    )}
+                </div>
                 <div className="flex gap-3 justify-center">
                     <button
                         onClick={() => window.location.href = '/admin'}

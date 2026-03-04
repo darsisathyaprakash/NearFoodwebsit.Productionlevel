@@ -92,7 +92,7 @@ export default function CartPage() {
     const items = (cart?.cart_items || []) as CartItem[];
     const total = items.reduce((acc: number, item: CartItem) => {
         const menuItem = Array.isArray(item.menu_items) ? item.menu_items[0] : item.menu_items;
-        const price = menuItem?.price || 0;
+        const price = menuItem?.price ?? 0;
         return acc + Number(price) * item.quantity;
     }, 0);
 
@@ -179,11 +179,11 @@ export default function CartPage() {
                                             </div>
                                             <div>
                                                 <h3 className="font-bold text-gray-900">{menuItem?.name}</h3>
-                                                <p className="text-sm text-gray-500">{formatPrice(menuItem?.price || 0)}</p>
+                                                <p className="text-sm text-gray-500">{formatPrice(menuItem?.price ?? 0)}</p>
                                             </div>
                                         </div>
                                         <span className="font-bold text-gray-900">
-                                            {formatPrice((menuItem?.price || 0) * item.quantity)}
+                                            {formatPrice((menuItem?.price ?? 0) * item.quantity)}
                                         </span>
                                     </div>
                                 );
