@@ -3,6 +3,8 @@ import { createServerClient } from '@/lib/server-client';
 import { verifyPaymentSchema } from '@/utils/api-validation';
 import { ZodError } from 'zod';
 
+export const dynamic = 'force-dynamic';
+
 // Stripe secret key (optional — if not set, dummy mode skips verification)
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 

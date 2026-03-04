@@ -3,6 +3,8 @@ import { createServerClient } from '@/lib/server-client';
 import { createPaymentOrderSchema } from '@/utils/api-validation';
 import { ZodError } from 'zod';
 
+export const dynamic = 'force-dynamic';
+
 // Stripe secret key (optional — if not set, we run in dummy mode)
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 
@@ -19,7 +21,7 @@ export async function POST(request: NextRequest) {
         // Validate request body
         const body = await request.json();
         const validated = createPaymentOrderSchema.parse(body);
-        const { amount, currency = 'USD' } = validated;
+        const { amount, currency = 'INR' } = validated;
 
         // ─── Dummy Mode (no Stripe key configured) ───
         if (!STRIPE_SECRET_KEY || STRIPE_SECRET_KEY === 'sk_test_dummy') {

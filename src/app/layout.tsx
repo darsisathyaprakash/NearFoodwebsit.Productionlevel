@@ -1,10 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import { AuthProvider } from '@/components/AuthProvider';
-import { Navbar } from '@/components/Navbar';
-import { FloatingCartButton } from '@/components/FloatingCartButton';
-import { ToastProvider } from '@/components/ui/Toast';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { LayoutShell } from '@/components/LayoutShell';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -14,6 +11,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://nearfood.app'),
   title: 'NearFood - Fresh Food Delivered Fast',
   description:
     'Order delicious food from the best restaurants near you. Fast delivery, great prices, and amazing variety.',
@@ -28,7 +26,7 @@ export const metadata: Metadata = {
     siteName: 'NearFood',
     images: [
       {
-        url: '/og-image.jpg', // Ensure this file exists in public/ folder or update path
+        url: '/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'NearFood - Fresh Food Delivered Fast',
@@ -64,13 +62,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased font-sans text-gray-900">
         <ErrorBoundary>
-          <ToastProvider>
-            <AuthProvider>
-              <Navbar />
-              <main className="min-h-screen bg-gray-50 pb-20">{children}</main>
-              <FloatingCartButton />
-            </AuthProvider>
-          </ToastProvider>
+          <LayoutShell>{children}</LayoutShell>
         </ErrorBoundary>
       </body>
     </html>

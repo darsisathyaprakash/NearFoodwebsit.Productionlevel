@@ -122,3 +122,46 @@ export interface Toast {
     message: string;
     duration?: number;
 }
+
+// ── Admin Dashboard Types ──────────────────────────────────────────────
+
+export type UserRole = 'admin' | 'user';
+
+export interface UserProfile {
+    id: string;
+    user_id: string;
+    role: UserRole;
+    is_blocked: boolean;
+    created_at: string;
+    email?: string;
+    name?: string;
+}
+
+export interface SiteSettings {
+    id: string;
+    restaurant_name: string;
+    logo_url?: string | null;
+    contact_email?: string | null;
+    phone?: string | null;
+    delivery_charge: number;
+    updated_at: string;
+}
+
+export interface AuditLog {
+    id: string;
+    admin_user_id: string;
+    action: string;
+    entity_type: string;
+    entity_id?: string | null;
+    details: Record<string, unknown>;
+    created_at: string;
+}
+
+export interface AdminStats {
+    totalOrders: number;
+    totalRevenue: number;
+    totalMenuItems: number;
+    totalUsers: number;
+    recentOrders: Order[];
+    revenueByDay: { date: string; revenue: number }[];
+}
