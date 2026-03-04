@@ -26,7 +26,7 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
 
                     <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded-md shadow-sm text-xs font-bold text-gray-800 flex items-center gap-1">
                         <Clock className="w-3 h-3" />
-                        {restaurant.delivery_time_min || 30} min
+                        {restaurant.delivery_time_min ?? 30} min
                     </div>
                 </div>
                 <div className="p-4 flex flex-col flex-grow">

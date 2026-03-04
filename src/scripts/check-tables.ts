@@ -23,7 +23,7 @@ async function checkTables() {
                 console.error(`[MISSING/ERROR] ${table}:`, error.message);
             } else {
                 console.log(`[OK] ${table} exists. Rows: ${count}`);
-                if (table === 'restaurants') restaurantsCount = count || 0;
+                if (table === 'restaurants') restaurantsCount = count ?? 0;
             }
         } catch (err) {
             console.error(`[ERROR] calling client for ${table}:`, err);

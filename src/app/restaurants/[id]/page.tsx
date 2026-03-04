@@ -71,7 +71,7 @@ export default async function RestaurantMenuPage({ params }: { params: Promise<{
                                     <Star className="w-4 h-4 fill-current" /> {restaurant.rating || 'New'}
                                 </div>
                                 <div className="flex items-center gap-1 text-gray-700">
-                                    <Clock className="w-4 h-4" /> {restaurant.delivery_time_min || 30} mins
+                                    <Clock className="w-4 h-4" /> {restaurant.delivery_time_min ?? 30} mins
                                 </div>
                                 <div className="flex items-center gap-1 text-gray-700">
                                     <MapPin className="w-4 h-4" /> {restaurant.address.split(',')[0]}

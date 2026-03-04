@@ -47,8 +47,8 @@ export async function GET(request: NextRequest) {
             pagination: {
                 page,
                 limit,
-                total: count || 0,
-                totalPages: Math.ceil((count || 0) / limit),
+                total: count ?? 0,
+                totalPages: Math.ceil((count ?? 0) / limit),
             },
         });
     } catch (error) {

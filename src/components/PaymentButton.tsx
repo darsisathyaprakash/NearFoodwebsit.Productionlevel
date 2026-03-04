@@ -119,7 +119,7 @@ export function PaymentButton({
             const orderItemsData = cartItems.map((item) => ({
                 menu_item_id: item.menu_item_id,
                 name: item.menu_items?.name || 'Unknown Item',
-                price: item.menu_items?.price || 0,
+                price: item.menu_items?.price ?? 0,
                 quantity: item.quantity,
             }));
 
@@ -169,7 +169,7 @@ export function PaymentButton({
 
             if (orderError) {
                 console.error('Order creation error:', JSON.stringify(orderError, null, 2));
-                throw new Error(`Failed to create order: ${orderError.message || JSON.stringify(orderError)}`);
+                throw new Error('Failed to create order. Please try again or contact support.');
             }
 
             // 6. Create order items

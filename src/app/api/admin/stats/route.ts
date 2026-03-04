@@ -21,8 +21,8 @@ export async function GET() {
         ]);
 
         const orders = ordersRes.data || [];
-        const totalMenuItems = menuItemsRes.count || 0;
-        const totalUsers = usersRes.count || 0;
+        const totalMenuItems = menuItemsRes.count ?? 0;
+        const totalUsers = usersRes.count ?? 0;
 
         // Calculate total revenue (sum of all completed/delivered orders)
         const totalRevenue = orders.reduce((sum, order) => {
@@ -48,12 +48,15 @@ export async function GET() {
         }
 
         return NextResponse.json({
-            totalOrders: orders.length,
-            totalRevenue: Math.round(totalRevenue * 100) / 100,
-            totalMenuItems,
-            totalUsers,
-            recentOrders,
-            revenueByDay,
+            success: true,
+            data: {
+                totalOrders: orders.length,
+                totalRevenue: Math.round(totalRevenue * 100) / 100,
+                totalMenuItems,
+                totalUsers,
+                recentOrders,
+                revenueByDay,
+            }
         });
     } catch (error) {
         console.error('Admin stats error:', error);

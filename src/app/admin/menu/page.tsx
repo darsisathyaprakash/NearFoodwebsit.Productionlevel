@@ -49,10 +49,11 @@ function MenuContent() {
         try {
             setLoading(true);
             const res = await adminFetch('/api/admin/menu');
-            if (res.ok) {
-                const data = await res.json();
-                setItems(data);
+            if (!res.ok) {
+                throw new Error("API request failed");
             }
+            const json = await res.json();
+            setItems(json?.data || []);
         } catch (error) {
             console.error('Failed to fetch menu:', error);
         } finally {
@@ -204,7 +205,7 @@ function MenuContent() {
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                         <div>
                             <h1 className="text-2xl font-bold text-gray-900">Menu Management</h1>
-                            <p className="text-gray-500 text-sm mt-1">{items.length} items</p>
+                            <p className="text-gray-500 text-sm mt-1">{(items || []).length} items</p>
                         </div>
                         <button
                             onClick={openAddForm}
@@ -226,13 +227,13 @@ function MenuContent() {
                                 </div>
                             ))}
                         </div>
-                    ) : items.length === 0 ? (
+                    ) : (items || []).length === 0 ? (
                         <div className="text-center py-16">
                             <p className="text-gray-400">No menu items yet. Click &quot;Add Item&quot; to get started.</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {items.map((item) => (
+                            {(items || []).map((item) => (
                                 <div key={item.id} className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
                                     {/* Image */}
                                     <div className="h-36 bg-gray-100 relative overflow-hidden">
