@@ -27,7 +27,7 @@ export async function GET() {
             return NextResponse.json({ error: 'Failed to fetch settings' }, { status: 500 });
         }
 
-        return NextResponse.json(data);
+        return NextResponse.json({ success: true, data });
     } catch (error) {
         console.error('Settings GET error:', error);
         return NextResponse.json({ error: 'An error occurred' }, { status: 500 });
@@ -69,7 +69,7 @@ export async function PUT(request: NextRequest) {
 
         await logAdminAction(auth.userId!, 'updated_settings', 'site_settings', existing.id, validated);
 
-        return NextResponse.json(data);
+        return NextResponse.json({ success: true, data });
     } catch (error) {
         if (error instanceof ZodError) {
             return NextResponse.json({ error: error.issues[0].message }, { status: 400 });

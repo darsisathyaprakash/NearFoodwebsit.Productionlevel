@@ -43,7 +43,8 @@ export async function GET(request: NextRequest) {
         }
 
         return NextResponse.json({
-            orders: data || [],
+            success: true,
+            data: data || [],
             total: count || 0,
             page,
             limit,

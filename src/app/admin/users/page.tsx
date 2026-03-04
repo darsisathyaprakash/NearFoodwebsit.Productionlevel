@@ -21,10 +21,11 @@ function UsersContent() {
         try {
             setLoading(true);
             const res = await adminFetch('/api/admin/users');
-            if (res.ok) {
-                const data = await res.json();
-                setUsers(data);
+            if (!res.ok) {
+                throw new Error('API request failed');
             }
+            const json = await res.json();
+            setUsers(json?.data || []);
         } catch (error) {
             console.error('Failed to fetch users:', error);
         } finally {
@@ -105,7 +106,7 @@ function UsersContent() {
     };
 
     // Filter users by search
-    const filteredUsers = users.filter((user) =>
+    const filteredUsers = (users || []).filter((user) =>
         (user.user_id || '').toLowerCase().includes(search.toLowerCase()) ||
         (user.role || '').toLowerCase().includes(search.toLowerCase())
     );
@@ -136,7 +137,7 @@ function UsersContent() {
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                         <div>
                             <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
-                            <p className="text-gray-500 text-sm mt-1">{users.length} users</p>
+                            <p className="text-gray-500 text-sm mt-1">{(users || []).length} users</p>
                         </div>
                     </div>
 

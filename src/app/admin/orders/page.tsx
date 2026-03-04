@@ -41,12 +41,13 @@ function OrdersContent() {
                 ...(statusFilter !== 'ALL' ? { status: statusFilter } : {}),
             });
             const res = await adminFetch(`/api/admin/orders?${params}`);
-            if (res.ok) {
-                const data = await res.json();
-                setOrders(data.orders);
-                setTotalPages(data.totalPages);
-                setTotal(data.total);
+            if (!res.ok) {
+                throw new Error("API request failed");
             }
+            const json = await res.json();
+            setOrders(json?.data || []);
+            setTotalPages(json?.totalPages || 1);
+            setTotal(json?.total || 0);
         } catch (error) {
             console.error('Failed to fetch orders:', error);
         } finally {
@@ -197,14 +198,14 @@ function OrdersContent() {
                                                 </td>
                                             </tr>
                                         ))
-                                    ) : orders.length === 0 ? (
+                                    ) : (orders || []).length === 0 ? (
                                         <tr>
                                             <td colSpan={7} className="text-center py-12 text-gray-400">
                                                 No orders found
                                             </td>
                                         </tr>
                                     ) : (
-                                        orders.map((order) => (
+                                        (orders || []).map((order) => (
                                             <tr key={order.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                                                 <td className="px-4 py-3 font-mono text-xs text-gray-600">
                                                     #{order.id.slice(0, 8)}

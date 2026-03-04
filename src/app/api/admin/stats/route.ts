@@ -48,12 +48,15 @@ export async function GET() {
         }
 
         return NextResponse.json({
-            totalOrders: orders.length,
-            totalRevenue: Math.round(totalRevenue * 100) / 100,
-            totalMenuItems,
-            totalUsers,
-            recentOrders,
-            revenueByDay,
+            success: true,
+            data: {
+                totalOrders: orders.length,
+                totalRevenue: Math.round(totalRevenue * 100) / 100,
+                totalMenuItems,
+                totalUsers,
+                recentOrders,
+                revenueByDay,
+            }
         });
     } catch (error) {
         console.error('Admin stats error:', error);

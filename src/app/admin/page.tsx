@@ -21,10 +21,11 @@ function DashboardContent() {
         const fetchStats = async () => {
             try {
                 const res = await adminFetch('/api/admin/stats');
-                if (res.ok) {
-                    const data = await res.json();
-                    setStats(data);
+                if (!res.ok) {
+                    throw new Error("API request failed");
                 }
+                const json = await res.json();
+                setStats(json?.data || null);
             } catch (error) {
                 console.error('Failed to fetch stats:', error);
             } finally {
@@ -107,10 +108,10 @@ function DashboardContent() {
                                 <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
                                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Orders</h3>
                                     <div className="space-y-3">
-                                        {stats.recentOrders.length === 0 ? (
+                                        {(stats.recentOrders || []).length === 0 ? (
                                             <p className="text-gray-400 text-sm text-center py-8">No orders yet</p>
                                         ) : (
-                                            stats.recentOrders.map((order) => (
+                                            (stats.recentOrders || []).map((order) => (
                                                 <div
                                                     key={order.id}
                                                     className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0"

@@ -26,17 +26,18 @@ function SettingsContent() {
         try {
             setLoading(true);
             const res = await adminFetch('/api/admin/settings');
-            if (res.ok) {
-                const data = await res.json();
-                setSettings(data);
-                setForm({
-                    restaurant_name: data.restaurant_name || '',
-                    logo_url: data.logo_url || '',
-                    contact_email: data.contact_email || '',
-                    phone: data.phone || '',
-                    delivery_charge: data.delivery_charge || 2.99,
-                });
+            if (!res.ok) {
+                throw new Error("API request failed");
             }
+            const json = await res.json();
+            setSettings(json?.data || null);
+            setForm({
+                restaurant_name: json?.data?.restaurant_name || '',
+                logo_url: json?.data?.logo_url || '',
+                contact_email: json?.data?.contact_email || '',
+                phone: json?.data?.phone || '',
+                delivery_charge: json?.data?.delivery_charge || 2.99,
+            });
         } catch (error) {
             console.error('Failed to fetch settings:', error);
         } finally {
@@ -61,8 +62,8 @@ function SettingsContent() {
             });
 
             if (res.ok) {
-                const data = await res.json();
-                setSettings(data);
+                const json = await res.json();
+                setSettings(json?.data || null);
                 setAlert({ type: 'success', message: 'Settings saved successfully!' });
             } else {
                 const data = await res.json();
