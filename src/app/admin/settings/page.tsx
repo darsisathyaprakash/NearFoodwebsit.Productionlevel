@@ -30,14 +30,17 @@ function SettingsContent() {
                 throw new Error("API request failed");
             }
             const json = await res.json();
-            setSettings(json?.data || null);
-            setForm({
-                restaurant_name: json?.data?.restaurant_name || '',
-                logo_url: json?.data?.logo_url || '',
-                contact_email: json?.data?.contact_email || '',
-                phone: json?.data?.phone || '',
-                delivery_charge: json?.data?.delivery_charge ?? 2.99,
-            });
+            const data = json?.data ?? null;
+            setSettings(data);
+            if (data) {
+                setForm({
+                    restaurant_name: data.restaurant_name || '',
+                    logo_url: data.logo_url || '',
+                    contact_email: data.contact_email || '',
+                    phone: data.phone || '',
+                    delivery_charge: data.delivery_charge ?? 2.99,
+                });
+            }
         } catch (error) {
             console.error('Failed to fetch settings:', error);
         } finally {
