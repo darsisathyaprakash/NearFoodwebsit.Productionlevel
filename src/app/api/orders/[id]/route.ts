@@ -74,7 +74,7 @@ export async function PATCH(
         }
 
         // Only allow updating specific fields
-        const allowedUpdates: { [key: string]: any } = {};
+        const allowedUpdates: Record<string, unknown> = {};
         if (body.status !== undefined) {
             allowedUpdates.status = body.status;
         }

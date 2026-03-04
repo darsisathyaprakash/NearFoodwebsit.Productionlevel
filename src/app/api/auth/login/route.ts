@@ -3,6 +3,8 @@ import { insforge } from '@/lib/insforge';
 import { loginSchema } from '@/utils/api-validation';
 import { ZodError } from 'zod';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
@@ -22,7 +24,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        return NextResponse.json(data);
+        return NextResponse.json({ success: true, data });
     } catch (error) {
         if (error instanceof ZodError) {
             return NextResponse.json(

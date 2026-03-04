@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { insforge } from '@/lib/insforge';
 import { createServerClient } from '@/lib/server-client';
 
+export const dynamic = 'force-dynamic';
+
 // Simple in-memory rate limiter (for production, use Redis or similar)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
@@ -26,6 +28,14 @@ function checkRateLimit(identifier: string): boolean {
 
 export async function GET(request: NextRequest) {
     try {
+        // Block in production (defense-in-depth — middleware also blocks this)
+        if (process.env.NODE_ENV === 'production') {
+            return NextResponse.json(
+                { error: 'Seed endpoint is disabled in production' },
+                { status: 403 }
+            );
+        }
+
         // Check authentication
         const insforgeServer = await createServerClient();
         const { data: sessionData, error: authError } = await insforgeServer.auth.getCurrentSession();

@@ -3,6 +3,7 @@ import { createServerClient } from '@/lib/server-client';
 import { createOrderSchema } from '@/utils/api-validation';
 import { ZodError } from 'zod';
 import { MenuItem } from '@/types/types';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -54,7 +55,7 @@ export async function POST(request: NextRequest) {
             const id = menuItem?.id;
 
             if (!price || !name || !id) {
-                console.error('Invalid menu item data:', item);
+                logger.error('Invalid menu item data', null, { item });
                 return NextResponse.json(
                     { error: 'Invalid cart data: missing item information' },
                     { status: 400 }
@@ -97,7 +98,7 @@ export async function POST(request: NextRequest) {
             .single();
 
         if (orderError) {
-            console.error('Order creation error:', orderError);
+            logger.error('Order creation failed', orderError);
             return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
         }
 
@@ -112,7 +113,7 @@ export async function POST(request: NextRequest) {
             .insert(itemsToInsert);
 
         if (itemsError) {
-            console.error('Order items creation error:', itemsError);
+            logger.error('Order items creation failed', itemsError);
             // Attempt to rollback order
             await insforge.database.from('orders').delete().eq('id', order.id);
             return NextResponse.json({ error: 'Failed to create order items' }, { status: 500 });
@@ -125,7 +126,7 @@ export async function POST(request: NextRequest) {
             .eq('cart_id', cart.id);
 
         if (deleteError) {
-            console.error('Cart items delete error:', deleteError);
+            logger.error('Cart items delete failed', deleteError);
             // Non-critical error, order is already created
         }
 
@@ -135,11 +136,11 @@ export async function POST(request: NextRequest) {
             .eq('id', cart.id);
 
         if (updateError) {
-            console.error('Cart update error:', updateError);
+            logger.error('Cart update failed', updateError);
             // Non-critical error, order is already created
         }
 
-        return NextResponse.json({ success: true, orderId: order.id });
+        return NextResponse.json({ success: true, data: { orderId: order.id } });
     } catch (error) {
         if (error instanceof ZodError) {
             return NextResponse.json(
@@ -148,6 +149,7 @@ export async function POST(request: NextRequest) {
             );
         }
         console.error('Order creation error:', error);
+        logger.error('Order creation failed', error);
         return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
     }
 }
@@ -170,13 +172,13 @@ export async function GET(request: NextRequest) {
             .order('created_at', { ascending: false });
 
         if (error) {
-            console.error('Orders fetch error:', error);
+            logger.error('Orders fetch failed', error);
             return NextResponse.json({ error: 'Failed to fetch orders' }, { status: 500 });
         }
 
-        return NextResponse.json(orders || []);
+        return NextResponse.json({ success: true, data: orders || [] });
     } catch (error) {
-        console.error('Orders GET error:', error);
+        logger.error('Orders GET failed', error);
         return NextResponse.json({ error: 'An error occurred' }, { status: 500 });
     }
 }

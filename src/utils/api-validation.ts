@@ -27,7 +27,7 @@ export const addToCartSchema = z.object({
 // Payment validation schemas
 export const createPaymentOrderSchema = z.object({
     amount: z.number().positive('Amount must be positive').max(100000, 'Amount cannot exceed 100000'),
-    currency: z.string().default('USD').optional(),
+    currency: z.string().default('INR').optional(),
 });
 
 export const verifyPaymentSchema = z.object({
